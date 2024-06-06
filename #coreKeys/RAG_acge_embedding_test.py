@@ -10,7 +10,7 @@ from langchain_openai import ChatOpenAI
 
 from langchain_community.document_loaders import TextLoader
 # 加载补充文档
-loader = TextLoader("./data/data1.md")
+loader = TextLoader("../data/data1.md")
 docs = loader.load()
 
 # Split - 分词
