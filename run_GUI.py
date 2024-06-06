@@ -7,7 +7,6 @@ from HelloUi.main_window import MainWindow
 if __name__ == "__main__":
 
     app = QApplication(sys.argv)
-    main_window = MainWindow()
-
+    main_window = MainWindow("Hello My AI - 基于RAG和多LLM协作的现实系统构建工具")
     main_window.show()
     sys.exit(app.exec())

@@ -1,22 +1,36 @@
 from PyQt6.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QWidget
-from HelloUi.views.io_view import IOWindow
+from HelloUi.views.io_view import View
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, windowTitle="I am MainWindow,Please Update Name!"):
         super().__init__()
-        self.setWindowTitle("Main Window")
+        self.windowTitle = windowTitle
+
+        self.main_window_init() # 初始化主窗口
+        self.main_button_init() # 初始化按钮
+        self.main_layout_init(self.mainButtons) # 初始化布局
+
+        # container = QWidget()
+        # container.setLayout(self.layout)
+        # self.setCentralWidget(container)
+
+    def main_window_init(self):
+        self.setWindowTitle(self.windowTitle)
         self.setGeometry(100, 100, 600, 400)
 
-        self.main_button = QPushButton("保定学院知识库", self)
-        self.main_button.clicked.connect(self.show_io_window)
+    def main_button_init(self):
+        self.mainButtons = []  # 存储 窗口按钮
 
-        layout = QVBoxLayout()
-        layout.addWidget(self.main_button)
+        bdu_button = QPushButton("保定学院知识库", self)
+        bdu_button.clicked.connect(self.show_window)  # 添加监听器，检测到点击后，执行self.show_io_window
+        self.mainButtons.append(bdu_button)
 
-        container = QWidget()
-        container.setLayout(layout)
-        self.setCentralWidget(container)
+    def main_layout_init(self, buttons):
+        # 目前为单布局方案 未创建布局列表
+        self.layout = QVBoxLayout()  # 存储 布局
+        for button in buttons:
+            self.layout.addWidget(button)
 
-    def show_io_window(self):
-        self.io_window = IOWindow()
-        self.io_window.show()
+    def show_window(self):
+        self.other_view = View()
+        self.other_view.show()
