@@ -1,3 +1,5 @@
+import os
+
 import bs4
 from langchain import hub
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -13,10 +15,17 @@ from langchain_community.document_loaders import TextLoader
 class chatgpt_acge():
     def __init__(self):
         self.data_path = "./data/data1.md"
-        docs = self.__load_data()
-        splits_doc = self.__split(docs)
-        retriever = self.__embedding(splits_doc)
+        self.embeddings = OllamaEmbeddings(model="mofanke/acge_text_embedding")
+        self.chromaDB_path = "./chromaDB"
 
+        if os.path.exists(self.chromaDB_path):
+            retriever = self.__embedding_load()
+        else:
+            docs = self.__load_data(self.data_path)
+            splits_doc = self.__split(docs)
+            retriever = self.__embedding_save(splits_doc)
+
+        # Post-processing - 后处理
         def __format_docs(docs):
             return "\n\n".join(doc.page_content for doc in docs)
 
@@ -34,8 +43,8 @@ class chatgpt_acge():
                 | StrOutputParser()
         )
 
-    def __load_data(self):
-        loader = TextLoader(self.data_path)
+    def __load_data(self, data_path="./data/data1.md"):
+        loader = TextLoader(data_path)
         docs = loader.load()
         return docs
 
@@ -44,25 +53,28 @@ class chatgpt_acge():
         splits = text_splitter.split_documents(docs)
         return splits
 
-    def __embedding(self,splits_doc):
-        vectorstore = Chroma.from_documents(documents=splits_doc,embedding=OllamaEmbeddings(model="mofanke/acge_text_embedding"))
+    # def __embedding(self,splits_doc):
+    #     vectorstore = Chroma.from_documents(documents=splits_doc,embedding=OllamaEmbeddings(model="mofanke/acge_text_embedding"))
+    #     retriever = vectorstore.as_retriever()
+    #     print("indexing done - 检索完毕")
+    #     return retriever
+
+    def __embedding_save(self,splits_doc,persist_directory="./chromaDB"):
+        vectorstore = Chroma.from_documents(documents=splits_doc,embedding=self.embeddings,persist_directory=persist_directory)
+        vectorstore.persist()
         retriever = vectorstore.as_retriever()
-        print("indexing done - 检索完毕")
+        print("indexing done - 检索数据保存完毕")
+        return retriever
+
+    def __embedding_load(self,persist_directory="./chromaDB"):
+        vectorstore = Chroma(persist_directory=persist_directory,embedding_function=self.embeddings)
+        retriever = vectorstore.as_retriever()
+        print("indexing done - 检测到向量数据，已成功读取！")
         return retriever
 
     def return_anwser(self,input_text):
         output_text = self.rag_chain.invoke(input_text)
         return output_text
 
-    # Post-processing - 后处理
 
 # llm = Ollama(model="qwen:4b")
-
-
-# dataset=["你是什么语言模型？由什么公司开发？",
-#          "保定学院的人工智能学院周三上什么课程?",
-#          "2024年张宇阳的年龄是多少？",
-#          "张宇阳的爱好是什么？"]
-# for idx, _q in enumerate(dataset, start=1):
-#     print(f"问题{idx}：{_q}")
-#     print(rag_chain.invoke(_q))
