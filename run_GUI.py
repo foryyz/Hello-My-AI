@@ -2,7 +2,6 @@ import sys
 from PyQt6.QtWidgets import QApplication
 from HelloUi.main_window import MainWindow
 
-# from langchain_RAG_API import chatgpt_acge_One
 
 if __name__ == "__main__":
 
