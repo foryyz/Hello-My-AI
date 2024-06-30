@@ -5,3 +5,4 @@ HelloUi/views/__pycache__/
 __pycache__/
 langchain_RAG_API/__pycache__/
 RAG_API/__pycache__/
+SparkEmbedding/

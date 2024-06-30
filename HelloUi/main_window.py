@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
             button = QPushButton(button_label, self)
             # button.setFixedSize(120,60)
             # button.clicked.connect(self.show_view) # 改为信号与槽机制中传递参数
-            button.clicked.connect(lambda checked, data_id=index, view_name=button_label: self.show_view(data_id,view_name))
+            button.clicked.connect(lambda checked, aigc_id=index, view_name=button_label: self.show_view(aigc_id, view_name))
             self.mainButtons.append(button)
 
     def main_layout_init(self, buttons):
@@ -42,6 +42,6 @@ class MainWindow(QMainWindow):
             self.layout.addWidget(button)
         self.layout.addStretch(1)  # 再次添加伸缩因子，将按钮放置在窗口中央
 
-    def show_view(self,data_id, view_name):
-        mine_view = View(data_id,view_name)
+    def show_view(self,aigc_id, view_name):
+        mine_view = View(aigc_id,view_name)
         mine_view.show()

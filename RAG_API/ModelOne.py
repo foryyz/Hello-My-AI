@@ -7,14 +7,14 @@ from langchain_core.runnables import RunnablePassthrough
 
 # yyz
 import utils
+from utils import aigcs
 import RAG_API.ModelFunctions as mf
 
 class ModelOne:
-    def __init__(self, data_id):
-        data_path = utils.data_path[data_id]
-        chroma_name = utils.chroma_name[data_id]
-        chromadb_path = "./chromaDB/{}".format(chroma_name)
-        print(chromadb_path)
+    def __init__(self, aigc_id):
+        data_path = aigcs[aigc_id].data_path
+        chromadb_path = aigcs[aigc_id].chromDB_path
+        print("Tips: 检索数据位置为：" + chromadb_path)
         embeddings = utils.embeddings
 
         if os.path.exists(chromadb_path):
