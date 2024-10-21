@@ -8,6 +8,6 @@
 
 项目名称：Hello My AI - 基于RAG和多LLM协作的现实系统构建工具
 
-核心技术图示：https://github.com/langchain-ai/rag-from-scratch
+核心技术图示：https://github.com/langchain-ai/rag-from-scratch/
 
-具体说明请查看: https://foryyz.top/posts/ragllm/myai/
+具体说明请查看: https://foryyz.top/posts/myprojects/myai/
